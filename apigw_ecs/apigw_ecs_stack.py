@@ -1,5 +1,4 @@
 from aws_cdk import (
-    aws_elasticloadbalancingv2,
     core as cdk,
     aws_apigateway as apigateway,
     aws_ecs as ecs,

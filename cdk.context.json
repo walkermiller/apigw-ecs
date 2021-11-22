@@ -58,5 +58,16 @@
     "us-east-2a",
     "us-east-2b",
     "us-east-2c"
-  ]
+  ],
+  "load-balancer-listener:account=851165779994:listenerPort=80:listenerProtocol=HTTP:loadBalancerArn=arn$:aws:elasticloadbalancing:us-east-2:851165779994:loadbalancer/app/Apigw-farga-XZZONNTPQ719/8e737dd53aca70c7:loadBalancerType=application:region=us-east-2": {
+    "listenerArn": "arn:aws:elasticloadbalancing:us-east-2:851165779994:listener/app/Apigw-farga-XZZONNTPQ719/8e737dd53aca70c7/d44b276696f0ebb3",
+    "listenerPort": 80,
+    "securityGroupIds": [
+      "sg-0bd4f65ff4806a9c3"
+    ]
+  },
+  "security-group:account=851165779994:region=us-east-2:securityGroupId=sg-0bd4f65ff4806a9c3": {
+    "securityGroupId": "sg-0bd4f65ff4806a9c3",
+    "allowAllOutbound": false
+  }
 }
