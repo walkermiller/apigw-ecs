@@ -11,8 +11,9 @@ class EcsStack(cdk.Stack):
     def __init__(self, scope: cdk.Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        image="public.ecr.aws/w5p8b6x2/cputest:latest"
-        containerPort=80
+        image = cdk.CfnParameter(self, id="image", type="String").value_as_string
+        containerPort = cdk.CfnParameter(self, id="port", type="Number").value_as_number
+
         vpc = ec2.Vpc.from_lookup(self, 
             'ECSVPC',
             vpc_id=self.node.try_get_context('vpcid'))

@@ -1,5 +1,10 @@
+Parameters:
+  image:
+    Type: String
+  port:
+    Type: Number
 Resources:
-  listenerSecurityGroupsg0bd4f65ff4806a9c3toEcsStackserviceSecurityGroupBB4C628D80ED9E9BDC:
+  listenerSecurityGroupsg0bd4f65ff4806a9c3toEcsStackserviceSecurityGroupBB4C628DIndirectPort8ED2DCDB:
     Type: AWS::EC2::SecurityGroupEgress
     Properties:
       GroupId: sg-0bd4f65ff4806a9c3
@@ -9,10 +14,12 @@ Resources:
         Fn::GetAtt:
           - serviceSecurityGroupF051F0EB
           - GroupId
-      FromPort: 80
-      ToPort: 80
+      FromPort:
+        Ref: port
+      ToPort:
+        Ref: port
     Metadata:
-      aws:cdk:path: EcsStack/listener/SecurityGroup-sg-0bd4f65ff4806a9c3/to EcsStackserviceSecurityGroupBB4C628D:80
+      aws:cdk:path: EcsStack/listener/SecurityGroup-sg-0bd4f65ff4806a9c3/to EcsStackserviceSecurityGroupBB4C628D:{IndirectPort}
   listenerlisttgC3C6F629:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
     Properties:
@@ -76,11 +83,14 @@ Resources:
     Properties:
       ContainerDefinitions:
         - Essential: true
-          Image: public.ecr.aws/w5p8b6x2/cputest:latest
+          Image:
+            Ref: image
           Name: container
           PortMappings:
-            - ContainerPort: 80
-              HostPort: 80
+            - ContainerPort:
+                Ref: port
+              HostPort:
+                Ref: port
               Protocol: tcp
       Cpu: "256"
       Family: EcsStacktaskdef2A2E3AE6
@@ -107,7 +117,8 @@ Resources:
       LaunchType: FARGATE
       LoadBalancers:
         - ContainerName: container
-          ContainerPort: 80
+          ContainerPort:
+            Ref: port
           TargetGroupArn:
             Ref: tg2DCFFD86
       NetworkConfiguration:
@@ -139,24 +150,26 @@ Resources:
       VpcId: vpc-04ac1d1b90b05b743
     Metadata:
       aws:cdk:path: EcsStack/service/SecurityGroup/Resource
-  serviceSecurityGroupfromEcsStacklistenerSecurityGroupsg0bd4f65ff4806a9c3D5643ACD8099D1D728:
+  serviceSecurityGroupfromEcsStacklistenerSecurityGroupsg0bd4f65ff4806a9c3D5643ACDIndirectPort1E5102DB:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
       IpProtocol: tcp
       Description: Load balancer to target
-      FromPort: 80
+      FromPort:
+        Ref: port
       GroupId:
         Fn::GetAtt:
           - serviceSecurityGroupF051F0EB
           - GroupId
       SourceSecurityGroupId: sg-0bd4f65ff4806a9c3
-      ToPort: 80
+      ToPort:
+        Ref: port
     Metadata:
-      aws:cdk:path: EcsStack/service/SecurityGroup/from EcsStacklistenerSecurityGroupsg0bd4f65ff4806a9c3D5643ACD:80
+      aws:cdk:path: EcsStack/service/SecurityGroup/from EcsStacklistenerSecurityGroupsg0bd4f65ff4806a9c3D5643ACD:{IndirectPort}
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:
-      Analytics: v2:deflate64:H4sIAAAAAAAA/2VQy27CQAz8Fu7LUkA99FaUPlSpB5TwA65jqJuwG9m7qVCUf+8mUStSTvbM2jPjXdv1dmPvFo/wrUssq1WHXsh2RQCsTE7qoyCZzDsNEjGY7Oh+2d4MSx3hxnaJLgijcLi8io/N80lI1cw483/ohnhz41pvqAYNjLWH8gNqcMju1CabXdPUjBDYu3fWQI4kjzUNQjN8NXcAOVH487uCyQY1Ra9j2pTh8bbNoAFM8fbiWy5JdqoeeRRWcwCtnujIjgc8qc8Z7wJwCnXFvaQAEKggaRlp+oKx7Q3D2Xa5n+4Zat/3Zn8Jn96ttvbB3i++lHkp0QU+k82n+gNR03I1wwEAAA==
+      Analytics: v2:deflate64:H4sIAAAAAAAA/2VQy27CQAz8Fu7LUkA99FZEH6rUQxT4Adcx1CXsRraXCkX5924StYJysmfsnRnv3M+XC383eYRvnWJ1mLUYhXy7McCDW+9CAQJHMhJXksYkSG4dg5oktH7+y3auV2gJF77N9IYwCdv5VWJqnvdCqu6Kc/+Xboi3MDzrHNWgxlhHqD6ghoAc9qdss2qamhGMY3hnNQokZaqpF7rCF3tbkD3Zn98FzDaoOXqdtD82D2/bNTSAOV4h8cQVyUo1Ig/C6raghyfaceAej+rXTAwGnENdcC85ABhtSE6MNH7B0HaO4ejbMo739LXrOlec7TOG2dI/+PvJlzJPJQXjI/lyrD8Vn0JU0AEAAA==
     Metadata:
       aws:cdk:path: EcsStack/CDKMetadata/Default
 
