@@ -11,6 +11,7 @@ class EcsStack(cdk.Stack):
     def __init__(self, scope: cdk.Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
+        ## Make these parameters. This allows us to potentially use this as a template. 
         image = cdk.CfnParameter(self, id="image", type="String").value_as_string
         containerPort = cdk.CfnParameter(self, id="port", type="Number").value_as_number
 
@@ -32,8 +33,7 @@ class EcsStack(cdk.Stack):
             id="ecs-cluster",
             vpc=vpc,
             enable_fargate_capacity_providers=True,
-            container_insights=True
-        )
+            container_insights=True)
 
         ## Create the Target group
         target_group = elb.ApplicationTargetGroup(
@@ -41,16 +41,14 @@ class EcsStack(cdk.Stack):
             id="tg",
             vpc=vpc,
             protocol=elb.ApplicationProtocol.HTTP,
-            target_type=elb.TargetType.IP
-        )
+            target_type=elb.TargetType.IP)
 
         ## Add the Target Group to the Listener
         listener.add_target_groups(
             id="listtg",
             path_pattern = "/second",
             priority=10,
-            target_groups=[target_group]
-        )
+            target_groups=[target_group])
 
         ## Create the ECS Task Definition
         ecs_task_definition = ecs.TaskDefinition(self,
@@ -58,15 +56,13 @@ class EcsStack(cdk.Stack):
             cpu="256",
             compatibility=ecs.Compatibility.FARGATE,
             memory_mib="512",
-            network_mode=ecs.NetworkMode.AWS_VPC
-        )
+            network_mode=ecs.NetworkMode.AWS_VPC)
 
         ## Add the Container to the Task definition
         ecs_task_definition.add_container(
             id="container",
             image=ecs.ContainerImage.from_registry(image),
-            port_mappings=[ecs.PortMapping(container_port=containerPort, host_port=containerPort, protocol=ecs.Protocol.TCP)]
-        )
+            port_mappings=[ecs.PortMapping(container_port=containerPort, host_port=containerPort, protocol=ecs.Protocol.TCP)])
 
         ## Create the ECS Service
         ecs_service = ecs.FargateService(
@@ -74,8 +70,7 @@ class EcsStack(cdk.Stack):
             id="service",
             cluster=ecs_cluster,
             platform_version=ecs.FargatePlatformVersion.VERSION1_4,
-            task_definition=ecs_task_definition
-        )
+            task_definition=ecs_task_definition)
 
         ### Attache the Target Group to the ECS Service
         ecs_service.attach_to_application_target_group(target_group=target_group)
