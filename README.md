@@ -10,7 +10,9 @@ Complete Stack
 cdk deploy -c vpcid=vpc-######### -c account=######## -c region=us-east-2 ApigwEcsStack
 ~~~
 
-Add additional ECS service, ALB Target Group, attach the service to target group, and attache the target group to the ALB Listener
+Add additional ECS service, ALB Target Group, attach the service to target group, and attache the target group to the ALB Listener.  
+
+To generate the cloudformation  
 ~~~
-cdk deploy -c vpcid=vpc-######### -c ###alb-arn###  alb=-c account=######## -c region=us-east-2 EcsStack
+cdk synth -c vpcid=vpc-######### -c '###alb-arn###'  alb=-c account=######## -c region=us-east-2 EcsStack
 ~~~
